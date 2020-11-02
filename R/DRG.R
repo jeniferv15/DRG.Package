@@ -46,11 +46,11 @@ payment_DRG <- function(df, payment) {
       ggplot2::ggtitle(paste0(payment, ' Box Plot')) + ## changing plot title
       ggplot2::theme_bw() + ## changing theme
       ggplot2::theme(
-        axis.text.x = element_text(angle = 60, ## changing orientation of x axis
+        axis.text.x = ggplot2::element_text(angle = 60, ## changing orientation of x axis
                                    hjust = 1),
-        text = element_text(size = 9),
+        text = ggplot2::element_text(size = 9),
         ## changing text size
-        plot.title = element_text(hjust = 0.5)
+        plot.title = ggplot2::element_text(hjust = 0.5)
       ) ## centering title
   }
   else {
