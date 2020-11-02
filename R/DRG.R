@@ -24,8 +24,7 @@ options(scipen = 999)
 #'
 payment_DRG <- function(df, payment) {
   data <- df %>%
-    dplyr::select(
-      ##selecting appropriate data
+    dplyr::select( ##selecting appropriate data
       `DRG Definition`,
       `Average Covered Charges`,
       `Average Total Payments`,
@@ -35,8 +34,7 @@ payment_DRG <- function(df, payment) {
     dplyr::group_by(`DRG Code`) %>%  ## group by code
     dplyr::arrange(`DRG Code`) ## ordering DRG code in increasing order
 
-  if (payment %in% c("Average Covered Charges" ,
-                     ## payment options
+  if (payment %in% c("Average Covered Charges" ,## payment options
                      "Average Total Payments" ,
                      "Average Medicare Payments")) {
     ggplot2::ggplot(data, ggplot2::aes(x = `DRG Code`, y = get(payment) / 10000)) + ## ggplot set up
@@ -47,11 +45,9 @@ payment_DRG <- function(df, payment) {
       ggplot2::theme_bw() + ## changing theme
       ggplot2::theme(
         axis.text.x = ggplot2::element_text(angle = 60, ## changing orientation of x axis
-                                   hjust = 1),
-        text = ggplot2::element_text(size = 9),
-        ## changing text size
-        plot.title = ggplot2::element_text(hjust = 0.5)
-      ) ## centering title
+                                            hjust = 1),
+        text = ggplot2::element_text(size = 9), ## changing text size
+        plot.title = ggplot2::element_text(hjust = 0.5)) ## centering title
   }
   else {
     print(
@@ -78,48 +74,54 @@ payment_DRG <- function(df, payment) {
 #'
 stat_DRG <- function(df, stat, DRG_code) {
   data <- df %>%
-    dplyr::select(##selecting appropriate data
+    dplyr::select( ##selecting appropriate data
       `DRG Definition`,
       `Average Medicare Payments`) %>%
     tidyr::separate(col = `DRG Definition`, c("DRG.Code", "DRG.Definition"), " - ") %>% ## separating DRG Definition col into 2 col
-    dplyr::group_by(DRG.Code)%>% ## group by code
-    dplyr::filter(DRG.Code == DRG_code) ## filter DRG code alone
+    dplyr::group_by(DRG.Code) %>% ## group by code
+    dplyr::filter(DRG.Code == DRG_code) ## filter DRG code of interest from data
 
-  if (DRG_code %in% unique(data$DRG.Code)) {
-    if (stat %in% c("Mean", "mean")) {
+  if (DRG_code %in% unique(data$DRG.Code)){ ## checking of DRG code input is in DRG code column in data
+    if (stat %in% c("Mean", "mean")) { ## options that can be defined as mean
       paste0(
         'The mean for averge medicare payment for DRG code #',
-        paste0(DRG_code),' - ', paste0(data$DRG.Definition[1]),
+        paste0(DRG_code), ## pasting DRG code
+        ' - ',
+        paste0(data$DRG.Definition[1]), ## pasting DRG definition
         ' is $',
-        round(mean(data$`Average Medicare Payments`), 2),
+        round(mean(data$`Average Medicare Payments`), 2), ## calculating mean and rounded to 2 decimal places
         '.'
       )
     }
-    else if (stat %in% c("Median", "median")) {
+    else if (stat %in% c("Median", "median")) {## options that can be defined as median
       paste0(
         'The median for averge medicare payment for DRG code #',
-        paste0(DRG_code),' - ', paste0(data$DRG.Definition[1]),
+        paste0(DRG_code),## pasting DRG code
+        ' - ',
+        paste0(data$DRG.Definition[1]),## pasting DRG definition
         ' is $',
-        round(median(data$`Average Medicare Payments`), 2),
+        round(median(data$`Average Medicare Payments`), 2), ## calculating median and rounded to 2 decimal places
         '.'
       )
     }
-    else if (stat %in% c("SD", "sd", "standard deviation", "Standard Deviation")) {
+    else if (stat %in% c("SD", "sd", "standard deviation", "Standard Deviation")) { ## options that can be defined as sd
       paste0(
         'The standard deviation for averge medicare payment for DRG code #',
-        paste0(DRG_code),' - ', paste0(data$DRG.Definition[1]),
+        paste0(DRG_code),## pasting DRG code
+        ' - ',
+        paste0(data$DRG.Definition[1]),## pasting DRG definition
         ' is $',
-        round(sd(data$`Average Medicare Payments`), 2),
+        round(sd(data$`Average Medicare Payments`), 2), ## calculating sd and rounded to 2 decimal places
         '.'
       )
     }
     else {
-      print(
+      print( ## if did not select stat this will appear
         "Error: Please select statistic of interest, mean, median, or sd (standard deviation)."
       )
 
     }
-  } else {
+  } else { ## if DRG code not in data this will appear
     print("Error: Please select DRG code.")
   }
 }
