@@ -23,7 +23,6 @@ options(scipen = 999)
 #' payment_DRG(df.test, "Average Covered Charges")
 #'
 payment_DRG <- function(df, payment) {
-  library(dplyr)
   data <- df %>%
     dplyr::select(
       ##selecting appropriate data
@@ -78,7 +77,6 @@ payment_DRG <- function(df, payment) {
 #' stat_DRG(df.test, "mean", "065")
 #'
 stat_DRG <- function(df, stat, DRG_code) {
-  library(dplyr)
   data <- df %>%
     dplyr::select(##selecting appropriate data
       `DRG Definition`,
